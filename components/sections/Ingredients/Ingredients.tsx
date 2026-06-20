@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -117,7 +119,14 @@ export function Ingredients() {
   const meshRefs = useRef<(HTMLDivElement | null)[]>([]);
   const progressNodesRef = useRef<(HTMLDivElement | null)[]>([]);
 
+  const textWrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const { isComplete } = usePreloader();
+
   useEffect(() => {
+    if (!isComplete) return;
+
     const ctx = gsap.context(() => {
       const wrap = wrapRef.current;
       const sticky = stickyRef.current;
@@ -311,7 +320,7 @@ export function Ingredients() {
     }, wrapRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isComplete]);
 
   const particles = Array.from({ length: 30 });
 

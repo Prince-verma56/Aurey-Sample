@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 import { Observer } from "gsap/Observer";
 
 gsap.registerPlugin(ScrollTrigger, Observer);
@@ -39,8 +41,13 @@ export function BrandStory() {
   const dividerRef = useRef<HTMLDivElement>(null);
   const eyebrowWrapRef = useRef<HTMLDivElement>(null);
   const leakRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLElement>(null);
+  const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const { isComplete } = usePreloader();
 
   useEffect(() => {
+    if (!isComplete) return;
+
     const ctx = gsap.context(() => {
 
       /* ── 1. Sheet-peel initial states ── */
@@ -113,7 +120,7 @@ export function BrandStory() {
 
     }, sectionRef);
     return () => ctx.revert();
-  }, []);
+  }, [isComplete]);
 
   const leaks = [
     { color: "#D9B98E", top: "10%", left: "5%", size: "45vw" },

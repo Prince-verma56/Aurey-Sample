@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 import { products } from "@/data/products";
 import type { Product } from "@/data/products";
 
@@ -297,8 +299,11 @@ export function Products() {
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const leakRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { isComplete } = usePreloader();
 
   useEffect(() => {
+    if (!isComplete) return;
+
     const ctx = gsap.context(() => {
       /* ── header words split reveal ── */
       gsap.set(
@@ -374,7 +379,7 @@ export function Products() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isComplete]);
 
   return (
     <section

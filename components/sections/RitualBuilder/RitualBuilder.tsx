@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -99,8 +100,11 @@ export function RitualBuilder() {
   const pathRef = useRef<SVGPathElement>(null);
   const progressNodesRef = useRef<(HTMLDivElement | null)[]>([]);
   const parallaxTargets = useRef<(HTMLDivElement | null)[]>([]);
+  const { isComplete } = usePreloader();
 
   useEffect(() => {
+    if (!isComplete) return;
+
     const ctx = gsap.context(() => {
       const wrap = containerRef.current;
       const sticky = stickyRef.current;
@@ -206,6 +210,7 @@ export function RitualBuilder() {
       scrollTl.addLabel("finalReveal");
       scrollTl.to(".scene-3", { autoAlpha: 0, scale: 0.8, y: -30, duration: 0.8, ease: "power2.inOut", force3D: true }, "finalReveal")
         .to(".bg-text-3", { autoAlpha: 0, duration: 0.8 }, "finalReveal")
+        .to(".section-eyebrow", { autoAlpha: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, "finalReveal") // Fade out top heading
         .to(".final-assembly", { autoAlpha: 1, pointerEvents: "auto", duration: 0.1 }, "finalReveal+=0.4")
         .fromTo(".final-card",
           { scale: 0.8, y: 50, autoAlpha: 0, rotationY: 15, z: -100 },
@@ -262,7 +267,7 @@ export function RitualBuilder() {
 
     }, containerRef);
     return () => ctx.revert();
-  }, []);
+  }, [isComplete]);
 
   return (
     <section ref={containerRef} className="relative bg-[#F7F4EF] w-full" style={{ paddingTop: 80, paddingBottom: 100 }}>
@@ -313,7 +318,7 @@ export function RitualBuilder() {
         <div className="absolute inset-y-0 right-0 w-[15vw] bg-gradient-to-l from-[#EAE5DB]/40 to-transparent z-[5] pointer-events-none mix-blend-multiply" />
 
         {/* ── SECTION HEADING ── */}
-        <div className="section-eyebrow absolute top-12 left-1/2 -translate-x-1/2 w-full z-[20] flex flex-col items-center gap-4 invisible pointer-events-none text-center">
+        <div className="section-eyebrow absolute top-12 left-1/2 -translate-x-1/2 z-[20] flex flex-col items-center gap-4 invisible pointer-events-none text-center whitespace-nowrap">
           <div className="flex items-center gap-6">
             <div className="w-12 h-[1px] bg-gradient-to-l from-[#C89B6D]/50 to-transparent" />
             <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-[#8B6A50] font-semibold">Beauty Ritual Builder</span>
@@ -421,7 +426,7 @@ export function RitualBuilder() {
 
           {/* ── FINAL ASSEMBLY REVEAL ── */}
           <div className="final-assembly absolute inset-0 flex flex-col items-center justify-center opacity-0 z-30 pointer-events-none invisible">
-            <h3 className="final-ui font-serif text-[clamp(40px,7vw,80px)] leading-[1.05] tracking-[-0.02em] text-[#2C2416] mb-4">
+            <h3 className="final-ui font-orange text-[clamp(40px,7vw,80px)] leading-[1.05] tracking-[-0.02em] text-[#2C2416] mb-4">
               Your Aurey Ritual
             </h3>
             <div className="final-ui flex items-center gap-6 mb-16 font-sans text-[10px] tracking-[0.25em] uppercase text-[#8B6A50] font-semibold">

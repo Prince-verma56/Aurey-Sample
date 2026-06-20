@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Geist } from "next/font/google";
 import { LenisProvider } from "@/components/providers/LenisProvider";
+import { PreloaderProvider } from "@/components/providers/PreloaderProvider";
+import { Preloader } from "@/components/layout/Preloader";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -34,9 +36,12 @@ export default function RootLayout({
       className={cn("antialiased", cormorant.variable, inter.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-screen flex flex-col bg-canvas text-text-primary">
-        <LenisProvider>
-          {children}
-        </LenisProvider>
+        <PreloaderProvider>
+          <Preloader />
+          <LenisProvider>
+            {children}
+          </LenisProvider>
+        </PreloaderProvider>
       </body>
     </html>
   );

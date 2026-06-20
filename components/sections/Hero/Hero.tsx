@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 import { HeroContent } from "./HeroContent";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,11 +12,15 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoFrameRef = useRef<HTMLDivElement>(null);
   const [isZoomComplete, setIsZoomComplete] = useState(false);
+  const { isComplete } = usePreloader();
 
   useEffect(() => {
+    if (!isComplete) return;
+
     if (videoRef.current) {
-      // Start the video at 1 second initially
+      // Start the video at 1 second initially but keep it paused
       videoRef.current.currentTime = 1;
+      videoRef.current.pause();
     }
 
     const ctx = gsap.context(() => {
@@ -28,8 +33,21 @@ export function Hero() {
         clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' 
       });
 
-      // Cinematic Intro: Start video heavily zoomed in
-      gsap.set(".hero-video", { scale: 1.35 });
+      // Cinematic Intro: Start video heavily zoomed in and hidden
+      gsap.set(".hero-video", { scale: 1.35, opacity: 0 });
+
+      // Fade in the video after a slight delay (0.8s) while the preloader curtain lifts
+      gsap.to(".hero-video", {
+        opacity: 1,
+        duration: 1.5,
+        ease: "power2.inOut",
+        delay: 0.8,
+        onStart: () => {
+          if (videoRef.current) {
+            videoRef.current.play(); // Play the video only now
+          }
+        }
+      });
 
       // Smoothly zoom out over 3 seconds with a premium ease
       gsap.to(".hero-video", {
@@ -147,7 +165,7 @@ export function Hero() {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [isComplete]);
 
   return (
     <section className="relative w-full h-screen overflow-hidden bg-surface-1">
@@ -159,7 +177,6 @@ export function Hero() {
         {/* Immersive Edge-to-Edge Background Video */}
         <video
           ref={videoRef}
-          autoPlay
           muted
           playsInline
           className="hero-video absolute inset-0 w-full h-full object-cover -translate-y-4"

@@ -2,10 +2,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { ChevronDown, ArrowRight, Sparkles, Search, User, ShoppingBag, X, Droplets, Flower2, Sun } from 'lucide-react';
+import { ChevronDown, ArrowRight, Sparkles, Search, User, ShoppingBag, X, Droplets, Flower2, Sun, MoveRight } from 'lucide-react';
 import Link from 'next/link';
 import { CommandPalette } from '@/components/search/CommandPalette';
 import { CartDrawer } from '@/components/layout/CartDrawer';
+import { usePreloader } from '@/components/providers/PreloaderProvider';
 
 // --- Restructured Editorial Menu Data ---
 const menuData = {
@@ -53,6 +54,7 @@ export function Navbar() {
     const [activeTab, setActiveTab] = useState<MenuKey>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const { isComplete } = usePreloader();
     const navRef = useRef<HTMLElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
     const logoRef = useRef<HTMLDivElement>(null);
@@ -108,6 +110,8 @@ export function Navbar() {
 
     // Scroll-based Awwwards-Level Premium Navbar Animation
     useEffect(() => {
+        if (!isComplete) return;
+
         const SCROLL_THRESHOLD = 80;
         const DELTA_TRIGGER = 15;
         let lastScrollTime = 0;
@@ -206,7 +210,7 @@ export function Navbar() {
             window.removeEventListener('scroll', scrollListener);
             if (scrollTimeout) cancelAnimationFrame(scrollTimeout as any);
         };
-    }, []);
+    }, [isComplete]);
 
     return (
         <>

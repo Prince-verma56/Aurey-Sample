@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 
 export function useLenis() {
+  const { isComplete } = usePreloader();
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 2.5, // Increased from 1.2 for a much longer, smoother delay
@@ -13,6 +16,12 @@ export function useLenis() {
       touchMultiplier: 2,
     });
 
+    if (!isComplete) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -23,5 +32,5 @@ export function useLenis() {
     return () => {
       lenis.destroy();
     };
-  }, []);
+  }, [isComplete]);
 }

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "@/components/providers/PreloaderProvider";
 import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,21 +53,24 @@ export function Trust() {
   const parallaxTargets = useRef<(HTMLDivElement | null)[]>([]);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const meshRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { isComplete } = usePreloader();
 
   useEffect(() => {
+    if (!isComplete) return;
+
     const ctx = gsap.context(() => {
       const sec = sectionRef.current;
       if (!sec) return;
 
       // 1. Initial Setups (Prevent Flashing)
-      gsap.set(sec, { y: 120 }); // Pushed down for entrance rise
-      gsap.set(".trust-fade", { autoAlpha: 0, y: 30 });
-      gsap.set(".trust-stat", { autoAlpha: 0, y: 40, scale: 0.9 });
-      gsap.set(".trust-hero-wrap", { scale: 0.95, autoAlpha: 0, y: 80 });
-      gsap.set(".badge-item", { autoAlpha: 0, y: 20 });
-      gsap.set(".huge-bg-text", { autoAlpha: 0, yPercent: 15 });
+      gsap.set(sec, { y: 60 }); // Pushed down slightly for entrance rise
+      gsap.set(".trust-fade", { autoAlpha: 0, y: 20 });
+      gsap.set(".trust-stat", { autoAlpha: 0, y: 30, scale: 0.95 });
+      gsap.set(".trust-hero-wrap", { scale: 0.98, autoAlpha: 0, y: 40 });
+      gsap.set(".badge-item", { autoAlpha: 0, y: 15 });
+      gsap.set(".huge-bg-text", { autoAlpha: 0, yPercent: 10 });
       gsap.set(".prog-bar", { width: "0%" });
-      gsap.set(".clinical-card", { autoAlpha: 0, y: 40 });
+      gsap.set(".clinical-card", { autoAlpha: 0, y: 30 });
 
       // Directly control slider DOM to bypass React renders
       const setSliderPos = (pct: number) => {
@@ -75,21 +79,21 @@ export function Trust() {
       };
 
       // Master Entrance (Just section and BG)
-      gsap.to(sec, { y: 0, duration: 1.8, ease: "power3.out", force3D: true, scrollTrigger: { trigger: sec, start: "top 80%", once: true } });
+      gsap.to(sec, { y: 0, duration: 1.5, ease: "power3.out", force3D: true, scrollTrigger: { trigger: sec, start: "top 65%", once: true } });
       if (waveRef.current) {
-        gsap.fromTo(waveRef.current, { scaleY: 0.7 }, { scaleY: 1, duration: 2, ease: "power2.out", transformOrigin: "bottom", scrollTrigger: { trigger: sec, start: "top 80%", once: true } });
+        gsap.fromTo(waveRef.current, { scaleY: 0.8 }, { scaleY: 1, duration: 1.5, ease: "power2.out", transformOrigin: "bottom", scrollTrigger: { trigger: sec, start: "top 65%", once: true } });
       }
-      gsap.to(".huge-bg-text", { autoAlpha: 0.02, yPercent: 0, duration: 2, stagger: 0.2, ease: "power4.out", scrollTrigger: { trigger: sec, start: "top 80%", once: true } });
+      gsap.to(".huge-bg-text", { autoAlpha: 0.02, yPercent: 0, duration: 1.5, stagger: 0.2, ease: "power4.out", scrollTrigger: { trigger: sec, start: "top 65%", once: true } });
 
       // Header Animation
-      const headerTl = gsap.timeline({ scrollTrigger: { trigger: ".trust-header-wrap", start: "top 85%", once: true } });
+      const headerTl = gsap.timeline({ scrollTrigger: { trigger: ".trust-header-wrap", start: "top 70%", once: true } });
       headerTl.to(".trust-fade", { autoAlpha: 1, y: 0, duration: 1, stagger: 0.15, ease: "power3.out" })
               .fromTo(".trust-char", { yPercent: 100 }, { yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.02, ease: "power3.out" }, "<0.2");
 
       // Hero Interactive Experience
-      const heroTl = gsap.timeline({ scrollTrigger: { trigger: ".trust-hero-wrap", start: "top 80%", once: true } });
-      heroTl.to(".trust-hero-wrap", { autoAlpha: 1, scale: 1, y: 0, duration: 1.8, ease: "expo.out", force3D: true })
-            .to(".trust-stat", { autoAlpha: 1, y: 0, scale: 1, duration: 1, stagger: 0.2, ease: "back.out(1.5)" }, 0.4)
+      const heroTl = gsap.timeline({ scrollTrigger: { trigger: ".trust-hero-wrap", start: "top 65%", once: true } });
+      heroTl.to(".trust-hero-wrap", { autoAlpha: 1, scale: 1, y: 0, duration: 1.5, ease: "expo.out", force3D: true })
+            .to(".trust-stat", { autoAlpha: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.2, ease: "back.out(1.5)" }, 0.4)
             .fromTo(".drag-hint", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, 1.0);
 
       // The "Teach" Wobble
@@ -151,7 +155,7 @@ export function Trust() {
       return () => window.removeEventListener("mousemove", handleMouseMove);
     }, sectionRef);
     return () => ctx.revert();
-  }, []);
+  }, [isComplete]);
 
   // ─── INTERACTIVE REVEAL LOGIC ───
   useEffect(() => {
