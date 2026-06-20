@@ -104,7 +104,7 @@ export function HeroContent({ isZoomComplete = true }: { isZoomComplete?: boolea
     <div ref={containerRef} className="absolute inset-0 z-20 w-full h-full pointer-events-none overflow-hidden">
 
       {/* LEFT SIDE: Brand Story & CTA */}
-      <div className="absolute left-[5%] md:left-[5%] xl:left-[8%] top-[50%] -translate-y-1/2 text-left pointer-events-auto w-[90%] md:w-full max-w-[500px]">
+      <div className="absolute left-[5%] md:left-[5%] xl:left-[8%] top-[12%] md:top-[50%] md:-translate-y-1/2 text-left pointer-events-auto w-[90%] md:w-full max-w-[500px]">
         <div className="scroll-parallax-slow">
           <p
             className="hero-kicker opacity-0 translate-y-4 text-[10px] tracking-[0.2em] font-semibold text-[#D9B98E] uppercase mb-5 flex items-center gap-4"
@@ -131,7 +131,7 @@ export function HeroContent({ isZoomComplete = true }: { isZoomComplete?: boolea
             </div>
           </h1>
           <p
-            className="hero-subtitle opacity-0 text-[#E6D8C7]/90 text-[13px] md:text-[15px] font-light leading-[1.8] max-w-[260px] md:max-w-[280px] mb-8 md:mb-10"
+            className="hero-subtitle opacity-0 text-[#E6D8C7]/90 text-[13px] md:text-[15px] font-light leading-[1.6] md:leading-[1.8] max-w-[260px] md:max-w-[280px] mb-6 md:mb-10"
             style={{
               fontFamily: 'var(--font-inter)',
               textShadow: '0 2px 20px rgba(0,0,0,0.18), 0 8px 40px rgba(0,0,0,0.10)'
@@ -156,7 +156,7 @@ export function HeroContent({ isZoomComplete = true }: { isZoomComplete?: boolea
       <div className="absolute inset-0 pointer-events-none scroll-parallax-slow">
 
         {/* Callout 1: Left side of jar (Texture/Formula) */}
-        <div className="hero-hotspot opacity-0 absolute top-[58%] left-[38%] xl:left-[41%] flex items-center z-30 -translate-x-full">
+        <div className="hero-hotspot opacity-0 absolute top-[58%] left-[38%] xl:left-[41%] hidden md:flex items-center z-30 -translate-x-full">
           <div className="text-right mr-3">
             <p className="text-[9px] uppercase tracking-[0.2em] text-[#D9B98E] font-semibold mb-0.5" style={{ fontFamily: 'var(--font-inter)' }}>Texture</p>
             <p className="text-[12px] text-[#FFF5EB] font-light drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'var(--font-inter)' }}>Exfoliating Rice Grains</p>
@@ -166,7 +166,7 @@ export function HeroContent({ isZoomComplete = true }: { isZoomComplete?: boolea
         </div>
 
         {/* Callout 2: Right side of jar (Purity) */}
-        <div className="hero-hotspot opacity-0 absolute top-[48%] left-[62%] xl:left-[59%] flex items-center z-30">
+        <div className="hero-hotspot opacity-0 absolute top-[48%] left-[62%] xl:left-[59%] hidden md:flex items-center z-30">
           <div className="w-1.5 h-1.5 rounded-full bg-[#FFF5EB] shadow-[0_0_12px_rgba(255,245,235,1)] mr-1 animate-pulse" />
           <div className="w-[60px] lg:w-[80px] h-[1px] bg-gradient-to-l from-transparent to-[#D9B98E]/80 origin-left" />
           <div className="text-left ml-3">
@@ -176,7 +176,7 @@ export function HeroContent({ isZoomComplete = true }: { isZoomComplete?: boolea
         </div>
 
         {/* Callout 3: Top of jar (Potency) - L-Shape Line pointing up then right */}
-        <div className="hero-hotspot opacity-0 absolute top-[30%] lg:top-[33%] left-[46%] flex z-30">
+        <div className="hero-hotspot opacity-0 absolute top-[30%] lg:top-[33%] left-[46%] hidden md:flex z-30">
           <div className="relative">
             {/* The hotspot dot exactly at the jar lid */}
             <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 rounded-full bg-[#FFF5EB] shadow-[0_0_12px_rgba(255,245,235,1)] animate-pulse" />

@@ -35,7 +35,7 @@ export default function RootLayout({
       lang="en"
       className={cn("antialiased", cormorant.variable, inter.variable, "font-sans", geist.variable)}
     >
-      <body className="min-h-screen flex flex-col bg-canvas text-text-primary">
+      <body className="min-h-screen flex flex-col bg-canvas text-text-primary overflow-x-hidden">
         <PreloaderProvider>
           <Preloader />
           <LenisProvider>

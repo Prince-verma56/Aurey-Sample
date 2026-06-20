@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { ChevronDown, ArrowRight, Sparkles, Search, User, ShoppingBag, X, Droplets, Flower2, Sun, MoveRight } from 'lucide-react';
+import { ChevronDown, ArrowRight, Sparkles, Search, User, ShoppingBag, X, Droplets, Flower2, Sun, MoveRight, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { CommandPalette } from '@/components/search/CommandPalette';
 import { CartDrawer } from '@/components/layout/CartDrawer';
@@ -54,6 +54,7 @@ export function Navbar() {
     const [activeTab, setActiveTab] = useState<MenuKey>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { isComplete } = usePreloader();
     const navRef = useRef<HTMLElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
@@ -238,8 +239,8 @@ export function Navbar() {
                     </div>
                 </div>
 
-                {/* Navigation Links */}
-                <div className="flex-none flex items-center justify-center gap-10">
+                {/* Navigation Links (Hidden on Mobile) */}
+                <div className="hidden lg:flex flex-none items-center justify-center gap-10">
                     <button
                         ref={el => { menuItemsRef.current[0] = el; }}
                         onMouseEnter={() => handleMouseEnter('collections')}
@@ -281,9 +282,9 @@ export function Navbar() {
                     </button>
                 </div>
 
-                <div className="flex-1 basis-0 flex items-center justify-end gap-10">
+                <div className="flex-1 basis-0 flex items-center justify-end gap-6 lg:gap-10">
                     {/* Icons Container */}
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-4 lg:gap-8">
                         <button
                             ref={el => { menuItemsRef.current[4] = el; }}
                             onClick={() => setIsSearchOpen(true)}
@@ -302,13 +303,16 @@ export function Navbar() {
 
                         <button
                             ref={el => { menuItemsRef.current[6] = el; }}
-                            className="relative text-[#FFF5EB]/80 hover:text-[#D9B98E] hover:-translate-y-1 transition-transform duration-300"
+                            className="text-[#FFF5EB]/80 hover:text-[#D9B98E] hover:-translate-y-1 transition-transform duration-300 relative"
                             onClick={() => setIsCartOpen(true)}
                         >
-                            <ShoppingBag className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                            <span className="absolute -top-1.5 -right-2 bg-[#D9B98E] text-[#120D0A] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                                2
-                            </span>
+                            <ShoppingBag className="w-5 h-5" />
+                            <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#8B6A50] text-[#FFF5EB] rounded-full text-[9px] font-bold flex items-center justify-center">2</span>
+                        </button>
+
+                        {/* Hamburger Menu (Mobile Only) */}
+                        <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-[#FFF5EB]/80 hover:text-[#D9B98E] transition-colors ml-2">
+                            <Menu className="w-6 h-6" />
                         </button>
                     </div>
                 </div>
@@ -382,8 +386,21 @@ export function Navbar() {
                 </div>
             </nav>
 
+            {/* Mobile Menu Overlay */}
+            <div className={`fixed inset-0 z-[100] bg-[#120D0A]/95 backdrop-blur-xl transition-all duration-500 flex flex-col justify-center items-center lg:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-8 right-8 text-[#FFF5EB]/80 hover:text-[#D9B98E] transition-colors">
+                    <X className="w-8 h-8" strokeWidth={1.5} />
+                </button>
+                <div className="flex flex-col gap-10 text-center">
+                    {["Collections", "Ingredients", "Rituals", "Journal"].map((item) => (
+                        <button key={item} onClick={() => setIsMobileMenuOpen(false)} className="text-[32px] font-heading tracking-wide text-[#FFF5EB] hover:text-[#D9B98E] transition-colors">
+                            {item}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-            {/* The Global Search Overlay */}
             <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
         </>
     );

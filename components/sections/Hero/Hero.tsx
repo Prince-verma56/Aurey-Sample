@@ -27,10 +27,10 @@ export function Hero() {
       // Hide elements immediately on load so they don't show during the cinematic intro
       gsap.set("nav", { opacity: 0, y: -30 });
       // Set the huge text to be initially hidden on the right side using a clip-path mask
-      gsap.set(".hero-huge-text", { 
-        opacity: 0, 
-        x: 100, 
-        clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' 
+      gsap.set(".hero-huge-text", {
+        opacity: 0,
+        x: 100,
+        clipPath: 'polygon(100% -20%, 100% -20%, 100% 120%, 100% 120%)'
       });
 
       // Cinematic Intro: Start video heavily zoomed in and hidden
@@ -59,7 +59,7 @@ export function Hero() {
 
           // Animate the huge text in smoothly, sliding from the right like a sheet, AFTER everything else
           gsap.to(".hero-huge-text", {
-            clipPath: 'polygon(0% 0, 100% 0, 100% 100%, 0% 100%)',
+            clipPath: 'polygon(-20% -20%, 120% -20%, 120% 120%, -20% 120%)',
             opacity: (index, target) => target.classList.contains('opacity-80') ? 0.8 : 1,
             x: 0,
             duration: 1.8,
@@ -85,7 +85,7 @@ export function Hero() {
           clipPath: "polygon(2% 0%, 98% 0%, 95% 92%, 5% 92%)",
           borderRadius: "0% 0% 25% 25%",
         });
-        
+
         gsap.from(videoFrameRef.current, {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           borderRadius: "0% 0% 0% 0%",
@@ -106,7 +106,7 @@ export function Hero() {
           scrub: true,
         };
 
-        gsap.fromTo(".hero-huge-text", 
+        gsap.fromTo(".hero-huge-text",
           {
             scale: 1,
             y: 0,
@@ -127,7 +127,7 @@ export function Hero() {
         );
 
         // Premium Mask Reveal (curtain closing effect)
-        gsap.fromTo(".hero-text-wrapper", 
+        gsap.fromTo(".hero-text-wrapper",
           { clipPath: "inset(0 0 0 0)" },
           {
             clipPath: "inset(0 0 100% 0)",
@@ -136,9 +136,9 @@ export function Hero() {
             immediateRender: false
           }
         );
-        
+
         // Fade out the golden glow
-        gsap.fromTo(".hero-text-glow", 
+        gsap.fromTo(".hero-text-glow",
           { opacity: 1 },
           {
             opacity: 0,
@@ -185,13 +185,13 @@ export function Hero() {
         </video>
 
         {/* Extremely subtle overlay just to ensure white text pops, preserving the glowing halo */}
-        <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/10 pointer-events-none -right-12 mb-2" />
 
         {/* Text inside the video container - moves with clipPath and shows cream over the dark video */}
-        <div className="hero-text-wrapper absolute bottom-0 -right-2 z-20 pointer-events-none overflow-hidden" style={{ clipPath: "inset(0 0 0 0)" }}>
+        <div className="hero-text-wrapper absolute bottom-0 right-[2%] md:right-[3%] z-20 pointer-events-none overflow-visible">
           {/* Subtle golden luxury glow */}
           <div className="hero-text-glow absolute inset-0 -m-10 bg-[radial-gradient(circle,rgba(212,184,136,0.18)_0%,transparent_70%)]" />
-          <h1 className="hero-huge-text special-font hero-heading relative text-[5rem] md:text-[8rem] xl:text-[10rem] leading-[0.8] tracking-widest text-[#FFF5EB] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] opacity-80 will-change-transform">
+          <h1 className="hero-huge-text special-font hero-heading relative text-[18vw] sm:text-[5rem] md:text-[8rem] xl:text-[10rem] leading-[0.8] tracking-widest text-[#FFF5EB] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] opacity-80 whitespace-nowrap will-change-transform">
             A<b>U</b>REY
           </h1>
         </div>
@@ -201,8 +201,8 @@ export function Hero() {
       </div>
 
       {/* Text outside the video container - revealed underneath when the video clips up, showing dark on cream background */}
-      <div className="hero-text-wrapper absolute bottom-0 -right-2 z-0 pointer-events-none overflow-hidden" style={{ clipPath: "inset(0 0 0 0)" }}>
-        <h1 className="hero-huge-text special-font hero-heading relative text-[5rem] md:text-[8rem] xl:text-[10rem] leading-[0.8] tracking-widest text-text-primary will-change-transform">
+      <div className="hero-text-wrapper absolute bottom-0 right-[2%] md:right-[3%] z-0 pointer-events-none overflow-visible">
+        <h1 className="hero-huge-text special-font hero-heading relative text-[18vw] sm:text-[5rem] md:text-[8rem] xl:text-[10rem] leading-[0.8] tracking-widest text-text-primary whitespace-nowrap will-change-transform">
           A<b>U</b>REY
         </h1>
       </div>
