@@ -17,7 +17,7 @@ export default function Home() {
       <Products />
       <RitualBuilder />
       <Trust />
-      <BeforeAfter />
+      {/* <BeforeAfter /> */}
       <FooterCTA />
     </>
   );
