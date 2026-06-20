@@ -1,17 +1,26 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
+interface ImageComparisonProps {
+    beforeImage: string;
+    afterImage: string;
+    altBefore?: string;
+    altAfter?: string;
+    beforeClassName?: string;
+    afterClassName?: string;
+}
+
 // This component takes two image URLs (before and after) and creates a slider to compare them.
-export const ImageComparison = ({ beforeImage, afterImage, altBefore = 'Before', altAfter = 'After', beforeClassName = '', afterClassName = '' }) => {
+export const ImageComparison = ({ beforeImage, afterImage, altBefore = 'Before', altAfter = 'After', beforeClassName = '', afterClassName = '' }: ImageComparisonProps) => {
     // State to track the slider's position (from 0 to 100)
     const [sliderPosition, setSliderPosition] = useState(50);
     // State to track if the user is currently dragging the slider
     const [isDragging, setIsDragging] = useState(false);
 
     // Ref to the main container element to get its dimensions
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Function to handle the slider movement (for both mouse and touch)
-    const handleMove = useCallback((clientX) => {
+    const handleMove = useCallback((clientX: number) => {
         // If not dragging or no container ref, do nothing
         if (!isDragging || !containerRef.current) return;
         
@@ -28,13 +37,13 @@ export const ImageComparison = ({ beforeImage, afterImage, altBefore = 'Before',
 
     // Mouse event handlers
     const handleMouseDown = () => setIsDragging(true);
-    const handleMouseUp = () => setIsDragging(false);
-    const handleMouseMove = (e) => handleMove(e.clientX);
+    const handleMouseUp = useCallback(() => setIsDragging(false), []);
+    const handleMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
     
     // Touch event handlers
     const handleTouchStart = () => setIsDragging(true);
     const handleTouchEnd = () => setIsDragging(false);
-    const handleTouchMove = (e) => handleMove(e.touches[0].clientX);
+    const handleTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0].clientX);
 
     // Effect to add and clean up global event listeners for mouse up/leave
     // This ensures dragging stops even if the cursor leaves the component area

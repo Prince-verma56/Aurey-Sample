@@ -87,7 +87,7 @@ export function BrandStory() {
       });
 
       /* ── 3. Infinite marquee loops ── */
-      const setupLoop = (ref: React.RefObject<HTMLDivElement>, dir: 1 | -1, dur: number) => {
+      const setupLoop = (ref: React.RefObject<HTMLDivElement | null>, dir: 1 | -1, dur: number) => {
         const el = ref.current;
         if (!el) return;
         if (dir === -1) gsap.set(el, { xPercent: -50 });
