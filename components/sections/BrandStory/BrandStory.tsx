@@ -25,10 +25,10 @@ const row2Data = [
 
 const getShapeClasses = (shape: string) => {
   switch (shape) {
-    case "pill-h": return "w-[160px] md:w-[200px] h-[100px] md:h-[120px] rounded-full";
-    case "pill-v": return "w-[110px] md:w-[130px] h-[150px] md:h-[180px] rounded-full";
-    case "organic": return "w-[140px] md:w-[170px] h-[120px] md:h-[140px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%]";
-    default: return "w-[120px] md:w-[150px] h-[120px] md:h-[150px] rounded-full";
+    case "pill-h": return "w-[100px] md:w-[160px] h-[60px] md:h-[90px] rounded-full";
+    case "pill-v": return "w-[60px] md:w-[90px] h-[90px] md:h-[130px] rounded-full";
+    case "organic": return "w-[90px] md:w-[130px] h-[70px] md:h-[100px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%]";
+    default: return "w-[80px] md:w-[110px] h-[80px] md:h-[110px] rounded-full";
   }
 };
 
@@ -53,8 +53,8 @@ export function BrandStory() {
       /* ── 1. Sheet-peel initial states ── */
       gsap.set(eyebrowWrapRef.current, { clipPath: "inset(0 0 100% 0)", y: 20 });
       gsap.set(dividerRef.current, { scaleX: 0, opacity: 0, transformOrigin: "center center" });
-      gsap.set(".bs-row-1", { clipPath: "inset(100% 0 0 0)", y: 60 });
-      gsap.set(".bs-row-2", { clipPath: "inset(100% 0 0 0)", y: 60 });
+      gsap.set(".bs-row-1", { clipPath: "inset(100% -50% -50% -50%)", y: 60 });
+      gsap.set(".bs-row-2", { clipPath: "inset(100% -50% -50% -50%)", y: 60 });
 
       const revealTl = gsap.timeline({
         scrollTrigger: { trigger: sectionRef.current, start: "top 78%", once: true },
@@ -67,9 +67,9 @@ export function BrandStory() {
         // divider fans out from center
         .to(dividerRef.current, { scaleX: 1, opacity: 1, duration: 1.1, ease: "power4.out" }, 0.45)
         // marquee row 1 peels up
-        .to(".bs-row-1", { clipPath: "inset(0% 0 0 0)", y: 0, duration: 1.35, ease: "power3.out" }, 0.55)
+        .to(".bs-row-1", { clipPath: "inset(-50% -50% -50% -50%)", y: 0, duration: 1.35, ease: "power3.out" }, 0.55)
         // marquee row 2 peels up staggered
-        .to(".bs-row-2", { clipPath: "inset(0% 0 0 0)", y: 0, duration: 1.35, ease: "power3.out" }, 0.72)
+        .to(".bs-row-2", { clipPath: "inset(-50% -50% -50% -50%)", y: 0, duration: 1.35, ease: "power3.out" }, 0.72)
         // image capsules pop in
         .fromTo(".image-capsule",
           { scale: 0.82, opacity: 0 },
@@ -132,11 +132,19 @@ export function BrandStory() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 flex flex-col justify-center min-h-[60vh] bg-[#F7F4EF] overflow-hidden py-32 rounded-t-[48px] md:rounded-t-[64px] will-change-transform"
+      className="relative z-10 flex flex-col justify-center min-h-[60vh] bg-[#F7F4EF] overflow-x-clip py-20 md:py-24 rounded-t-[48px] md:rounded-t-[64px] will-change-transform"
       style={{ boxShadow: "0 -30px 80px rgba(0,0,0,0.05)" }}
     >
+      {/* Premium Watermark */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1] opacity-[0.03]">
+        <h2 className="text-[35vw] font-['Manrope'] font-bold tracking-tighter whitespace-nowrap select-none text-[#8B6A50]">AUREY</h2>
+      </div>
+
+      {/* Grainy Noise Overlay */}
+      <div className="absolute top-0 left-0 right-0 bottom-[-100px] opacity-[0.04] pointer-events-none z-[3] mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
       {/* Atmospheric light leaks */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-[2]">
+      <div className="absolute top-0 left-0 right-0 bottom-[-100px] pointer-events-none overflow-hidden z-[2]">
         {leaks.map((leak, i) => (
           <div key={i} ref={(el) => { leakRefs.current[i] = el; }}
             className="absolute rounded-full blur-[120px] opacity-30 will-change-transform"
@@ -166,61 +174,94 @@ export function BrandStory() {
         </div>
       </div>
 
-      {/* ── Marquee rows ── */}
+      {/* ── Marquee Tape Rows ── */}
+      <div className="relative z-10 w-full flex flex-col items-center justify-center gap-8 md:gap-16 overflow-hidden py-8 md:py-12">
+        
+        {/* ROW 1 TAPE: Dark, angled upwards */}
+        <div className="bs-row-1 relative z-[2] w-full flex items-center justify-center pointer-events-none">
+          <div style={{ transform: "rotate(-3deg)" }} className="pointer-events-auto w-full flex justify-center">
+            <div 
+              ref={row1ParallaxRef} 
+              className="w-[150vw] shrink-0 bg-[#1D1712] py-4 md:py-6 shadow-[0_20px_50px_rgba(29,23,18,0.3)] border-y border-[#3E342B]"
+            >
+              <div className="flex items-center w-max will-change-transform" ref={row1LoopRef}>
+                {[...row1Data, ...row1Data].map((item, index) => (
+                  <div key={`r1-${index}`} className="flex items-center mx-6 md:mx-10 group">
+                    <span
+                      className="marquee-text font-['Manrope',sans-serif] text-[clamp(45px,6vw,90px)] font-medium whitespace-nowrap leading-none tracking-tight text-[#F7F4EF] opacity-80 transition-opacity duration-500"
+                    >{item.text}</span>
+
+                    <div
+                      className={`image-capsule mx-6 md:mx-10 ${getShapeClasses(item.shape)} relative overflow-hidden shadow-lg border border-white/20 z-[3] will-change-transform transition-transform duration-700 ease-out group-hover:scale-105 cursor-pointer`}
+                      style={{ transform: "translateZ(0)" }}
+                      onMouseEnter={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 1, duration: 0.5, ease: "power2.out" }); }}
+                      onMouseLeave={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 0.8, duration: 0.5, ease: "power2.inOut" }); }}
+                    >
+                      <img src={item.img} alt={item.text} className="w-full h-full object-cover mix-blend-multiply opacity-90 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
+                      <div className="absolute inset-0 bg-[#1D1712]/10 backdrop-blur-[2px] opacity-100 transition-opacity duration-500 group-hover:opacity-0" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ROW 2 TAPE: Gold, angled downwards */}
+        <div className="bs-row-2 relative z-[1] w-full flex items-center justify-center pointer-events-none">
+          <div style={{ transform: "rotate(2deg)" }} className="pointer-events-auto w-full flex justify-center">
+            <div 
+              ref={row2ParallaxRef} 
+              className="w-[150vw] shrink-0 bg-[#D4B895] py-4 md:py-6 shadow-[0_30px_60px_rgba(139,106,80,0.15)] border-y border-white/40"
+            >
+              <div className="flex items-center w-max will-change-transform" ref={row2LoopRef}>
+                {[...row2Data, ...row2Data].map((item, index) => (
+                  <div key={`r2-${index}`} className="flex items-center mx-6 md:mx-10 group">
+                    <div
+                      className={`image-capsule mx-6 md:mx-10 ${getShapeClasses(item.shape)} relative overflow-hidden shadow-lg border border-[#8B6A50]/20 z-[3] will-change-transform transition-transform duration-700 ease-out group-hover:scale-105 cursor-pointer`}
+                      style={{ transform: "translateZ(0)" }}
+                      onMouseEnter={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 1, duration: 0.5, ease: "power2.out" }); }}
+                      onMouseLeave={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 0.8, duration: 0.5, ease: "power2.inOut" }); }}
+                    >
+                      <img src={item.img} alt={item.text} className="w-full h-full object-cover mix-blend-multiply opacity-90 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
+                      <div className="absolute inset-0 bg-[#D4B895]/20 backdrop-blur-[2px] opacity-100 transition-opacity duration-500 group-hover:opacity-0" />
+                    </div>
+
+                    <span
+                      className="marquee-text font-['Manrope',sans-serif] text-[clamp(45px,6vw,90px)] font-medium whitespace-nowrap leading-none tracking-tight text-[#2C2416] opacity-80 transition-opacity duration-500"
+                    >{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── Organic wave bottom ── */}
       <div
-        className="relative w-full flex flex-col gap-16 md:gap-24"
-        style={{
-          maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-          WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-        }}
+        aria-hidden
+        className="absolute left-0 right-0 pointer-events-none z-[1]"
+        style={{ bottom: -98, width: "100%" }}
       >
-        {/* ROW 1 */}
-        <div ref={row1ParallaxRef} className="bs-row-1 will-change-transform z-[1]">
-          <div className="flex items-center w-max will-change-transform" ref={row1LoopRef}>
-            {[...row1Data, ...row1Data].map((item, index) => (
-              <div key={`r1-${index}`} className="flex items-center mx-8 md:mx-12 group">
-                <span
-                  className="marquee-text font-['Manrope',sans-serif] text-[clamp(90px,11vw,200px)] font-medium whitespace-nowrap leading-none tracking-tight transition-[opacity,filter] duration-500"
-                  style={{ background: "linear-gradient(90deg, rgba(139,115,85,0.4), rgba(44,36,22,0.8), rgba(139,115,85,0.4))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", filter: "blur(0.5px)", opacity: 0.4 }}
-                >{item.text}</span>
-
-                <div
-                  className={`image-capsule mx-10 md:mx-16 ${getShapeClasses(item.shape)} relative overflow-hidden shadow-[0_20px_40px_rgba(90,68,56,0.12)] border border-white/40 z-[3] will-change-transform transition-transform duration-700 ease-out group-hover:scale-105 cursor-pointer`}
-                  style={{ transform: "translateZ(0)" }}
-                  onMouseEnter={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 0.85, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }); }}
-                  onMouseLeave={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 0.4, filter: "blur(0.5px)", duration: 0.5, ease: "power2.inOut" }); }}
-                >
-                  <img src={item.img} alt={item.text} className="w-full h-full object-cover mix-blend-multiply opacity-90 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
-                  <div className="absolute inset-0 bg-[#F7F4EF]/10 backdrop-blur-[2px] opacity-100 transition-opacity duration-500 group-hover:opacity-0" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ROW 2 */}
-        <div ref={row2ParallaxRef} className="bs-row-2 will-change-transform z-[1]">
-          <div className="flex items-center w-max will-change-transform" ref={row2LoopRef}>
-            {[...row2Data, ...row2Data].map((item, index) => (
-              <div key={`r2-${index}`} className="flex items-center mx-8 md:mx-12 group">
-                <div
-                  className={`image-capsule mx-10 md:mx-16 ${getShapeClasses(item.shape)} relative overflow-hidden shadow-[0_20px_40px_rgba(90,68,56,0.12)] border border-white/40 z-[3] will-change-transform transition-transform duration-700 ease-out group-hover:scale-105 cursor-pointer`}
-                  style={{ transform: "translateZ(0)" }}
-                  onMouseEnter={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 0.85, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }); }}
-                  onMouseLeave={(e) => { const s = e.currentTarget.parentElement?.querySelector(".marquee-text") as HTMLElement | null; if (s) gsap.to(s, { opacity: 0.4, filter: "blur(0.5px)", duration: 0.5, ease: "power2.inOut" }); }}
-                >
-                  <img src={item.img} alt={item.text} className="w-full h-full object-cover mix-blend-multiply opacity-90 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
-                  <div className="absolute inset-0 bg-[#F7F4EF]/10 backdrop-blur-[2px] opacity-100 transition-opacity duration-500 group-hover:opacity-0" />
-                </div>
-
-                <span
-                  className="marquee-text font-['Manrope',sans-serif] text-[clamp(90px,11vw,200px)] font-medium whitespace-nowrap leading-none tracking-tight transition-[opacity,filter] duration-500"
-                  style={{ background: "linear-gradient(90deg, rgba(139,115,85,0.4), rgba(44,36,22,0.8), rgba(139,115,85,0.4))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", filter: "blur(0.5px)", opacity: 0.4 }}
-                >{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <svg
+          viewBox="0 0 1440 200"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          style={{ display: "block", width: "100%", height: 100 }}
+        >
+          <defs>
+            <filter id="waveShadowBottom" x="-5%" y="0%" width="110%" height="200%">
+              <feDropShadow dx="0" dy="12" stdDeviation="15" floodColor="rgba(50,32,14,0.08)" />
+            </filter>
+          </defs>
+          <path
+            d="M0,40 C 160,160 320,20 540,90 C 720,150 900,10 1080,80 C 1220,135 1340,30 1440,75 L1440,0 L0,0 Z"
+            fill="#F7F4EF"
+            filter="url(#waveShadowBottom)"
+          />
+        </svg>
       </div>
     </section>
   );
